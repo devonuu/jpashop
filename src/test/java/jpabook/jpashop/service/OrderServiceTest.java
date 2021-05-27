@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.domain.item.Book;
 import jpabook.jpashop.domain.item.Item;
 import jpabook.jpashop.exception.NotEnoughStockException;
@@ -54,7 +55,8 @@ class OrderServiceTest {
 
         Order getOrder = orderService.findOne(orderId);
 
-
+        assertThat(OrderStatus.CANCEL).isEqualTo(getOrder.getStatus());
+        assertThat(10).isEqualTo(book.getStockQuantity());
     }
 
     @Test
