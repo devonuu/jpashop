@@ -49,4 +49,10 @@ public class MemberController {
         model.addAttribute("members", members);
         return "members/memberList";
     }
+
+    @GetMapping("/login")
+    public String login(Model model){
+        return "login/APIExamNaverLogin";
+    }
+
 }
