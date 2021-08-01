@@ -68,4 +68,27 @@ public class OrderRepository {
     }
 
 
+    public List<Order> findAllWithItem() {
+        /*
+        * 소스상에서 distinct는 가능하나 실제 쿼리상에서는 불가능하다.
+        * jpa 자체적으로 가져온 값에서 필터링을 해준다.
+        * */
+        return em.createQuery(
+            "select distinct o from Order o "
+                + "join fetch o.member m "
+                + "join fetch o.delivery d "
+                + "join fetch o.orderItems oi "
+                + "join fetch oi.item i", Order.class)
+            .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+            "select o from Order o "
+                + "join fetch o.member m "
+                + "join fetch o.delivery d", Order.class
+        ).setFirstResult(offset)
+            .setMaxResults(limit)
+            .getResultList();
+    }
 }
