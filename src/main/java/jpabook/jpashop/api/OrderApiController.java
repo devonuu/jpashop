@@ -12,6 +12,9 @@ import jpabook.jpashop.domain.OrderItem;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.query.OrderFlatDto;
+import jpabook.jpashop.repository.order.query.OrderQueryDto;
+import jpabook.jpashop.repository.order.query.OrderQueryRepository;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderApiController {
 
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     @GetMapping("/api/v1/orders")
     public List<Order> ordersV1(){
@@ -73,6 +77,23 @@ public class OrderApiController {
         return orders.stream().map(OrderDto::new).collect(Collectors.toList());
     }
 
+    @GetMapping("/api/v4/orders")
+    public List<OrderQueryDto> ordersV4(){
+        return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    @GetMapping("/api/v5/orders")
+    public List<OrderQueryDto> ordersV5(){
+        return orderQueryRepository.findAllByDto_optimization();
+    }
+
+    @GetMapping("/api/v6/orders")
+    public List<OrderQueryDto> ordersV6(){
+        List<OrderFlatDto> flats = orderQueryRepository.findAllByDto_flat();
+        //직접 분해하고 조립해야한다.
+        return null;
+    }
+
     @Data
     static class OrderDto{
         private Long id;
@@ -106,5 +127,4 @@ public class OrderApiController {
             count = orderItem.getCount();
         }
     }
-
 }
